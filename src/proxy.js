@@ -1,6 +1,12 @@
 export default function proxy (target) {
   // 对target做一个判断,只有对象和数组才可以proxy
-  console.log('proxy!! 22333')
+  const type = typeof target
+  // must be a object or an array, but not a function, target should not be null
+  if (type === 'object' && target) {
+    return true
+  } else {
+    throw new Error('proxied target must be a object but not null or an array')
+  }
 }
 
 export function beProxied (target) {

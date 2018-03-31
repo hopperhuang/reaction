@@ -1,7 +1,7 @@
-import { beProxied } from '../src/proxy'
+import proxy, { beProxied } from '../src/proxy'
 
 const assert = require('assert')
-describe('beproxyed', function () {
+describe('test beproxyed', function () {
   describe('get', function () {
     it('should return name\'s value', function () {
       const person = beProxied({name: 'hopperhuang'})
@@ -76,6 +76,70 @@ describe('beproxyed', function () {
       const person = beProxied({name: 'hopperhuang'})
       Object.preventExtensions(person)
       assert.equal(Reflect.isExtensible(person), false)
+    })
+  })
+})
+describe('test proxy', function () {
+  describe('proxy array', function () {
+    it('expected to be true', function () {
+      const bool = proxy([])
+      assert.equal(bool, true)
+    })
+  })
+  describe('proxy object', function () {
+    it('expected to be true', function () {
+      const bool = proxy({})
+      assert.equal(bool, true)
+    })
+  })
+  describe('proxy string', function () {
+    it('expected throw an error', function () {
+      const throwError = () => {
+        var name = 'hopperhuang'
+        proxy(name)
+      }
+      assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
+    })
+  })
+  describe('proxy number', function () {
+    it('expected throw an error', function () {
+      const throwError = () => {
+        var number = 1
+        proxy(number)
+      }
+      assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
+    })
+  })
+  describe('proxy boolean', function () {
+    it('should throw an error', function () {
+      const throwError = () => {
+        proxy(true)
+      }
+      assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
+    })
+  })
+  describe('proxy function', function () {
+    it('should throw an error', function () {
+      const throwError = () => {
+        proxy(() => {})
+      }
+      assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
+    })
+  })
+  describe('proxy null', function () {
+    it('should throw an error', function () {
+      const throwError = () => {
+        proxy(null)
+      }
+      assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
+    })
+    describe('proxy undefined', () => {
+      it('should throw an error', () => {
+        const throwError = () => {
+          proxy(undefined)
+        }
+        assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
+      })
     })
   })
 })
