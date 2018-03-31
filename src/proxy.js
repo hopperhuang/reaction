@@ -8,15 +8,19 @@ export default function proxy (target) {
     const copyTarget = isArray ? [...target] : {...target}
     // make copyTarget reactive
     // set listens to collect reaction
-    copyTarget.$lisntenrs = []
+    copyTarget.$lisntenrs = {}
     // listen to reactions
-    copyTarget.$listen = (reaction) => {
-      proxied.$lisntenrs.push(reaction)
+    copyTarget.$listen = (event, reaction) => {
+      proxied.$lisntenrs[event] = reaction
     }
     copyTarget.$emit = () => {
-      proxied.$lisntenrs.forEach(listener => {
-        listener(proxied)
+      const keys = Object.keys(proxied.$lisntenrs)
+      keys.forEach((key) => {
+        proxied.$lisntenrs[key](proxied)
       })
+      // proxied.$lisntenrs.forEach(listener => {
+      //   listener(proxied)
+      // })
     }
     const proxied = beProxied(copyTarget)
     // make it's children to be proxied

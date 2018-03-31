@@ -146,11 +146,11 @@ describe('test proxy', function () {
       assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
     })
   })
-  describe('test listen and emmit', () => {
+  describe('test listen and emit when target is object', () => {
     it('should add one when new value is setted', () => {
       const object = proxy({})
       let number = 1
-      object.$listen((object) => {
+      object.$listen('event', (object) => {
         number += object.number
       })
       object.number = 2
@@ -160,10 +160,30 @@ describe('test proxy', function () {
       const object = proxy({})
       object.person = {name: 'hopperhuang'}
       let name = ''
-      object.person.$listen((person) => {
+      object.person.$listen('event', (person) => {
         name = person.name
       })
       object.person.name = 'hopper'
+      assert.equal(name, 'hopper')
+    })
+  })
+  describe('test listen and emit when target is array', () => {
+    it('should add one when new value is settend', () => {
+      const array = proxy([])
+      let number = 1
+      array.$listen('event', (array) => {
+        number += array[0]
+      })
+      array[0] = 1
+      assert.equal(number, 2)
+    })
+    it('child can also listen', () => {
+      const array = proxy([{name: 'hopperhuang'}])
+      let name = ''
+      array[0].$listen('event', (element) => {
+        name = element.name
+      })
+      array[0].name = 'hopper'
       assert.equal(name, 'hopper')
     })
   })
