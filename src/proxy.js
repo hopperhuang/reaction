@@ -1,9 +1,23 @@
 export default function proxy (target) {
   // 对target做一个判断,只有对象和数组才可以proxy
-  const type = typeof target
+  const targetType = typeof target
   // must be a object or an array, but not a function, target should not be null
-  if (type === 'object' && target) {
-    return true
+  if (targetType === 'object' && target) {
+    // make target to be proxied
+    const proxied = beProxied(target)
+    // make it's children to be proxied
+    const keys = Object.keys(target)
+    for (let index = 0; index < keys.length; index++) {
+      const key = keys[index]
+      const value = target[key]
+      const valueType = typeof value
+      if (valueType === 'object' && value) {
+        proxied[key] = value
+      }
+    }
+    // marked as proxied
+    proxied.$proxied = true
+    return proxied
   } else {
     throw new Error('proxied target must be a object but not null or an array')
   }
@@ -15,8 +29,16 @@ export function beProxied (target) {
       return Reflect.get(target, property)
     },
     set (target, property, value) {
-      // 需要增加listener的调用
-      Reflect.set(target, property, value)
+      // make target and is child to be proxied
+      const valueType = typeof value
+      // just proxy object and array
+      if (valueType === 'object' && value) {
+        const proxied = proxy(value)
+        Reflect.set(target, property, proxied)
+      } else {
+        Reflect.set(target, property, value)
+      }
+      // call the listener
       return true
     },
     has (target, property) {

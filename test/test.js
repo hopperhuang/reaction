@@ -81,15 +81,30 @@ describe('test beproxyed', function () {
 })
 describe('test proxy', function () {
   describe('proxy array', function () {
-    it('expected to be true', function () {
-      const bool = proxy([])
-      assert.equal(bool, true)
+    it('expected array and it\'s object children $proxied property to be true', function () {
+      const array = proxy([{name: 'hopperhuang'}])
+      assert.equal(array.$proxied, true)
+      assert.equal(array[0].$proxied, true)
     })
   })
   describe('proxy object', function () {
-    it('expected to be true', function () {
-      const bool = proxy({})
-      assert.equal(bool, true)
+    it('expected object\'s object children $proxied property to be true', function () {
+      const object = proxy({
+        person: {name: 'hopperhuang'},
+        skills: {
+          name: 'draw',
+          rank: {
+            score: {
+              seasonOne: 10
+            }
+          }
+        }
+      })
+      assert.equal(object.$proxied, true)
+      assert.equal(object.person.$proxied, true)
+      assert.equal(object.skills.$proxied, true)
+      assert.equal(object.skills.rank.$proxied, true)
+      assert.equal(object.skills.rank.score.$proxied, true)
     })
   })
   describe('proxy string', function () {
