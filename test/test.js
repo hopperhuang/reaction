@@ -9,10 +9,12 @@ describe('test beproxyed', function () {
     })
   })
   describe('set', function () {
-    it('should return name\'s value', function () {
-      const person = beProxied({name: 'hopperhuang'})
-      person.name = 'hopper'
-      assert.equal(person.name, 'hopper')
+    it('should throw an error, beProxied should not be called alone, for a object to be proxied must hava listener and emit by default', function () {
+      const throwError = () => {
+        const person = beProxied({name: 'hopperhuang'})
+        person.name = 'hopper'
+      }
+      assert.throws(throwError, Error)
     })
   })
   describe('has', function () {
@@ -82,29 +84,16 @@ describe('test beproxyed', function () {
 describe('test proxy', function () {
   describe('proxy array', function () {
     it('expected array and it\'s object children $proxied property to be true', function () {
-      const array = proxy([{name: 'hopperhuang'}])
+      const array = proxy([])
+      array[0] = 1
       assert.equal(array.$proxied, true)
-      assert.equal(array[0].$proxied, true)
     })
   })
   describe('proxy object', function () {
     it('expected object\'s object children $proxied property to be true', function () {
-      const object = proxy({
-        person: {name: 'hopperhuang'},
-        skills: {
-          name: 'draw',
-          rank: {
-            score: {
-              seasonOne: 10
-            }
-          }
-        }
-      })
-      assert.equal(object.$proxied, true)
-      assert.equal(object.person.$proxied, true)
-      assert.equal(object.skills.$proxied, true)
-      assert.equal(object.skills.rank.$proxied, true)
-      assert.equal(object.skills.rank.score.$proxied, true)
+      const object = proxy({})
+      object.a = 1
+      assert(object.$proxied, true)
     })
   })
   describe('proxy string', function () {
@@ -148,13 +137,34 @@ describe('test proxy', function () {
       }
       assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
     })
-    describe('proxy undefined', () => {
-      it('should throw an error', () => {
-        const throwError = () => {
-          proxy(undefined)
-        }
-        assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
+  })
+  describe('proxy undefined', () => {
+    it('should throw an error', () => {
+      const throwError = () => {
+        proxy(undefined)
+      }
+      assert.throws(throwError, Error, 'proxied target must be a object but not null or an array')
+    })
+  })
+  describe('test listen and emmit', () => {
+    it('should add one when new value is setted', () => {
+      const object = proxy({})
+      let number = 1
+      object.$listen((object) => {
+        number += object.number
       })
+      object.number = 2
+      assert.equal(number, 3)
+    })
+    it('child can also listen', () => {
+      const object = proxy({})
+      object.person = {name: 'hopperhuang'}
+      let name = ''
+      object.person.$listen((person) => {
+        name = person.name
+      })
+      object.person.name = 'hopper'
+      assert.equal(name, 'hopper')
     })
   })
 })

@@ -4,12 +4,26 @@ export default function proxy (target) {
   // must be a object or an array, but not a function, target should not be null
   if (targetType === 'object' && target) {
     // make target to be proxied
-    const proxied = beProxied(target)
+    const isArray = Array.isArray(target)
+    const copyTarget = isArray ? [...target] : {...target}
+    // make copyTarget reactive
+    // set listens to collect reaction
+    copyTarget.$lisntenrs = []
+    // listen to reactions
+    copyTarget.$listen = (reaction) => {
+      proxied.$lisntenrs.push(reaction)
+    }
+    copyTarget.$emit = () => {
+      proxied.$lisntenrs.forEach(listener => {
+        listener(proxied)
+      })
+    }
+    const proxied = beProxied(copyTarget)
     // make it's children to be proxied
-    const keys = Object.keys(target)
+    const keys = Object.keys(copyTarget)
     for (let index = 0; index < keys.length; index++) {
       const key = keys[index]
-      const value = target[key]
+      const value = copyTarget[key]
       const valueType = typeof value
       if (valueType === 'object' && value) {
         proxied[key] = value
@@ -33,12 +47,19 @@ export function beProxied (target) {
       const valueType = typeof value
       // just proxy object and array
       if (valueType === 'object' && value) {
-        const proxied = proxy(value)
-        Reflect.set(target, property, proxied)
+        // just set listeners as default
+        if (property === '$lisntenrs') {
+          Reflect.set(target, property, value)
+          // set other properties to be proxied
+        } else {
+          const proxied = proxy(value)
+          Reflect.set(target, property, proxied)
+        }
       } else {
         Reflect.set(target, property, value)
       }
       // call the listener
+      target.$emit()
       return true
     },
     has (target, property) {
