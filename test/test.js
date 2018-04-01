@@ -187,4 +187,42 @@ describe('test proxy', function () {
       assert.equal(name, 'hopper')
     })
   })
+  describe('the same event listener will be coverd', function () {
+    it('should react to the second listener for the first one is overwriten', function () {
+      const object = proxy({})
+      let name = ''
+      object.$listen('event', (obj) => {
+        name = obj.name
+      })
+      object.$listen('event', (obj) => {
+        name = obj.nickname
+      })
+      object.name = 'hopper'
+      object.nickname = 'hopperhuang'
+      assert.equal(name, 'hopperhuang')
+    })
+  })
+  describe('unlisten event', function () {
+    it('should change nothing for event has benn unlistend', () => {
+      const object = proxy({})
+      let name = ''
+      object.$listen('event', (o) => {
+        name = o.name
+      })
+      object.$unlisten('event')
+      object.name = 'hopperhuang'
+      assert.equal(name, '')
+    })
+    it('should change nothing for event has been unlistend', () => {
+      const array = proxy([])
+      let name = ''
+      array.$listen('event', (element) => {
+        name = element[0].name
+      })
+      array[0] = {name: 'hopperhuang'}
+      array.$unlisten('event')
+      array[0] = {name: 'hopper'}
+      assert.equal(name, 'hopperhuang')
+    })
+  })
 })

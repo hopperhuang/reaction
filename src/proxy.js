@@ -16,11 +16,11 @@ export default function proxy (target) {
     copyTarget.$emit = () => {
       const keys = Object.keys(proxied.$lisntenrs)
       keys.forEach((key) => {
-        proxied.$lisntenrs[key](proxied)
+        proxied.$lisntenrs[key] && proxied.$lisntenrs[key](proxied)
       })
-      // proxied.$lisntenrs.forEach(listener => {
-      //   listener(proxied)
-      // })
+    }
+    copyTarget.$unlisten = (event) => {
+      delete proxied.$lisntenrs[event]
     }
     const proxied = beProxied(copyTarget)
     // make it's children to be proxied
