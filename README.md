@@ -50,7 +50,7 @@ person.name = 'change name'
 ```
 // you can see that we add listeners to the observable and marked it by using an event name
 // so it's easily for you to remove specific listeners by event names you've used just now
-person.$listen('changename')
+person.$unlisten('changename')
 pseron.name = 'reaction.js'
 // now the terminal will print out nothing for listener has been removed
 ```
