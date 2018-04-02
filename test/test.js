@@ -268,5 +268,25 @@ describe('test proxy', function () {
       proxied.person = {name: 'hopperhuang'}
       assert.equal(number, 1)
     })
+    it('new value should add new listener by youself', () => {
+      let number = 0
+      const proxied = proxy({
+        person: {
+          name: 'hopperhuang'
+        }
+      })
+      proxied.person.$listen('event', () => {
+        number += 1
+      })
+      proxied.person.name = 'hopper'
+      assert.equal(number, 1)
+      proxied.person = {name: 'hopperhuang'}
+      assert.equal(number, 1)
+      proxied.person.$listen('event', () => {
+        number *= 3
+      })
+      proxied.person.name = 'huang'
+      assert.equal(number, 3)
+    })
   })
 })
