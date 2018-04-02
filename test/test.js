@@ -1,4 +1,5 @@
-import proxy, { beProxied } from '../src/proxy'
+import { beProxied } from '../src/proxy'
+import proxy from '../src/index'
 
 const assert = require('assert')
 describe('test beproxyed', function () {
@@ -223,6 +224,49 @@ describe('test proxy', function () {
       array.$unlisten('event')
       array[0] = {name: 'hopper'}
       assert.equal(name, 'hopperhuang')
+    })
+  })
+  describe('define methods in object in advanced', () => {
+    it('change proxied value', () => {
+      const store = proxy({
+        name: 'hopperhuang',
+        changeName () {
+          this.name = 'hopper'
+        }
+      })
+      store.changeName()
+      assert.equal(store.name, 'hopper')
+    })
+    it('change proxied object\'s value although value has change ', () => {
+      const store = proxy({
+        person: {
+          name: 'hopperhuang'
+        },
+        changeName () {
+          this.person.name = 'hopper'
+        }
+      })
+      store.person = {name: 'huang'}
+      assert.equal(store.person.name, 'huang')
+      store.changeName()
+      assert.equal(store.person.name, 'hopper')
+    })
+  })
+  describe('listeners spy on itself, but not objet\'s keys, when object is dropped, listens is dropped too ', () => {
+    it('nothing will change, when then object\'s value changeed the second time ', () => {
+      let number = 0
+      const proxied = proxy({
+        person: {
+          name: 'hopperhuang'
+        }
+      })
+      proxied.person.$listen('event', () => {
+        number += 1
+      })
+      proxied.person.name = 'hopper'
+      assert.equal(number, 1)
+      proxied.person = {name: 'hopperhuang'}
+      assert.equal(number, 1)
     })
   })
 })
