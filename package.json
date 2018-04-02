@@ -1,6 +1,6 @@
 {
-  "name": "reaction",
-  "version": "0.1.0",
+  "name": "reaction-obsevable",
+  "version": "0.1.1",
   "description": "reaction javasctipt project",
   "main": "index.js",
   "directories": {
