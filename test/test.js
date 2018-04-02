@@ -237,6 +237,18 @@ describe('test proxy', function () {
       store.changeName()
       assert.equal(store.name, 'hopper')
     })
+    it('call child\'s method', () => {
+      const team = proxy({
+        leader: {
+          name: 'hopperhuang',
+          changeName () {
+            this.name = 'hopper'
+          }
+        }
+      })
+      team.leader.changeName()
+      assert.equal(team.leader.name, 'hopper')
+    })
     it('change proxied object\'s value although value has change ', () => {
       const store = proxy({
         person: {
