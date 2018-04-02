@@ -29,7 +29,7 @@ npm i reaction-obsevable
 1. transfrom object to be an observable
 
 ```
-import reaction frojm 'reaction-obsevable'
+import reaction from 'reaction-obsevable'
 const person = reaction({ name: 'reaction.js' })
 // now the person is observale, we can observe what property has change on person
 ```
