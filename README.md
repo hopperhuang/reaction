@@ -9,14 +9,14 @@ A ligth data flow framework, easily binding reactions to specific object.
 
 ### Feature
 
-* **Easy to use, transform object to be an observable, then u can listen on it's change
-* **Easy to learn, just 2 apis u have to learn, $listen and $unlisten
-* **Just object can be listen, reaction just observe object but no primative value
+* Easy to use, transform object to be an observable, then u can listen on it's change
+* Easy to learn, just 2 apis u have to learn, $listen and $unlisten
+* Just object can be listen, reaction just observe object but no primative value
 
 ### Core
-* ** Reaction just observe on objects
-* ** Property changes was reflected on it's owner's listener
-* ** We use Proxy to re-definie object's getter, setter and other behavior
+* Reaction just observe on objects
+* Property changes was reflected on it's owner's listener
+* We use Proxy to re-definie object's getter, setter and other behavior
 
 ### Install
 
