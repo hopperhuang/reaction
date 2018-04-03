@@ -11,6 +11,10 @@
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "author": "hopperhuang",
+  "repository" :{ 
+    "type" : "git"
+  , "url" : "https://github.com/hopperhuang/reaction.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
