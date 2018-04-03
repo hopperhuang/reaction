@@ -1,6 +1,6 @@
 # reaction-obsevable
 
-[![NPM version](https://img.shields.io/npm/v/dva.svg?style=flat)](https://www.npmjs.com/package/reaction-obsevable)
+[![NPM version](https://img.shields.io/npm/v/reaction-obsevable.svg?style=flat)](https://www.npmjs.com/package/reaction-obsevable)
 [![Build Status](https://travis-ci.org/hopperhuang/reaction.svg?branch=master)](https://travis-ci.org/hopperhuang/reaction)
 [![Coverage Status](https://coveralls.io/repos/github/hopperhuang/reaction/badge.svg?branch=master)](https://coveralls.io/github/hopperhuang/reaction?branch=master)
 
