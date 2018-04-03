@@ -25,6 +25,11 @@ A ligth data flow framework, easily binding reactions to specific object.
 npm i reaction-obsevable
 ```
 
+### Examples
+
+See examples: [here](https://github.com/hopperhuang/reaction-obsevable-examples)
+
+
 ### Usage
 
 1. transfrom object to be an observable
